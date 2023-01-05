@@ -25,9 +25,9 @@ Folder with name already exists, rerun script with a new name!
         context/AppContextProvider.tsx context/AppReducer.ts hooks/useAppContext.tsx hooks/useAuth.tsx && \
         printf '{}' > .prettierrc.json && \
         printf '\n# seo\npublic/robots.txt\npublic/sitemap.xml' >> .gitignore && \
-        npm set-script lint "next lint" && \
-        npm set-script postinstall "next-sitemap" && \
-        npm set-script prepare "husky install" &&  \
+        npm pkg set scripts.lint="next lint" && \
+        npm pkg set scripts.postinstall="next-sitemap" && \
+        npm pkg set scripts.prepare="husky install" &&  \
         npm run prepare && npx husky add .husky/pre-commit "npm run lint" && \
         npm pkg delete scripts.prepare
 	fi
@@ -63,9 +63,9 @@ Folder with name already exists, rerun script with a new name!
     if [[ $CYPRESS_PROCEED = 'Y' || $CYPRESS_PROCEED = 'y' ]]
 		then 
 			npm i -D cypress @testing-library/cypress env-cmd start-server-and-test && \
-            npm set-script cy:open "env-cmd -f .env.local cypress open" && \
-            npm set-script cy:start "start-server-and-test 'npm start' 3000 'npm run cy:open'" && \
-            npm set-script cy:build "npm run build && npm run cy:start" 
+            npm pkg set scripts.cy:open="env-cmd -f .env.local cypress open" && \
+            npm pkg set scripts.cy:start="start-server-and-test 'npm start' 3000 'npm run cy:open'" && \
+            npm pkg set scripts.cy:build="npm run build && npm run cy:start" 
 		else
 			echo '
 -------------------------------
