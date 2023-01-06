@@ -2,6 +2,7 @@
 
 #------------------------ Project Setup -------------------#
 CURRENT_WD=$(pwd)
+PVALUE=0
 echo '
 	 PROJECT SETUP
 ------------------------'
@@ -18,8 +19,8 @@ Folder with name already exists, rerun script with a new name!
 		cd $CURRENT_WD/$DIR_NAME
         
 		npm init -y && \
+		sed -i '/main/s|index.js|build/src/server.js|' package.json && \
 		npm pkg delete scripts.test && npm pkg set scripts.test="jest" && npm pkg set scripts.build="tsc" && \
-		npm pkg delete main && npm pkg set main="build/src/server.js" &&
 		npm pkg set scripts.dev:test="NODE_ENV=test ts-node-dev --respawn src/server.ts" && \
 		npm pkg set scripts.dev="ts-node-dev --respawn src/server.ts" && npx ts-jest config:init && \
 		npm pkg set scripts.start="node build/src/server.js" && npm pkg set scripts.lint="eslint src/**/**/*.ts" && 
@@ -37,9 +38,17 @@ Folder with name already exists, rerun script with a new name!
 		src/utils/auth.utils.ts src/utils/db.ts src/utils/token.utils.ts src/utils/swagger.ts src/utils/logger.ts && \
 		printf '{}' > .prettierrc.json && printf 'node_modules/ \nbuild/\nlogs/\n.env' > .gitIgnore && \
 		npm pkg set scripts.prepare="husky install" &&  \
-		tsc --init && npx eslint --init && git init && 
+		npx eslint --init && git init &&  \
 		npm run prepare && npx husky add .husky/pre-commit "npm run lint" && \
-		npm pkg delete scripts.prepare
+		npm pkg delete scripts.prepare && \
+		tsc --init || PVALUE=1 
+		
+		if [ $PVALUE = 1 ] 
+		then
+			npm install -g typescript && \
+			tsc --init && \
+			printf 'Inside the conty'
+		fi
 
 		read -p "NPM install cors package, type Y | N to proceed : " NPM_PROCEED
 
