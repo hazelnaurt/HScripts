@@ -24,21 +24,22 @@ Folder with name already exists, rerun script with a new name!
 		npm pkg set scripts.dev:test="NODE_ENV=test ts-node-dev --respawn src/server.ts" && \
 		npm pkg set scripts.dev="ts-node-dev --respawn src/server.ts" && npx ts-jest config:init && \
 		npm pkg set scripts.start="node build/src/server.js" && npm pkg set scripts.lint="eslint src/**/**/*.ts" && 
-		npm i express config dotenv jsonwebtoken cookie-parser mysql2 helmet bcryptjs yup winston \
+		npm i express config dotenv jsonwebtoken cookie-parser helmet bcryptjs yup winston \
 		swagger-jsdoc swagger-ui-express ts-node typescript && \
-		npm i -D @types/express @types/config @types/node ts-node-dev \
-		@types/jsonwebtoken @types/cookie-parser @types/mysql @types/bcryptjs \
+		npm i -D @types/express @types/config @types/node ts-node-dev prisma @prisma/client \
+		@types/jsonwebtoken @types/cookie-parser @types/bcryptjs \
 		supertest jest ts-jest @types/jest @types/supertest @typescript-eslint/parser \
 		eslint husky @types/swagger-jsdoc @types/swagger-ui-express && \
-		mkdir -p config SQL src src/schema src/models src/middleware src/services src/routes \
+		mkdir -p config src src/schema src/middleware src/services src/routes \
 		src/controllers src/utils __tests__ && \
 		touch .env .env.template .gitIgnore .prettierrc.json \
 		config/production.ts config/development.ts config/test.ts src/app.ts src/server.ts \
 		src/middleware/verifyAccess.ts src/middleware/verifyRefresh.ts \
 		src/utils/auth.utils.ts src/utils/db.ts src/utils/token.utils.ts src/utils/swagger.ts src/utils/logger.ts && \
-		printf '{}' > .prettierrc.json && printf 'node_modules/ \nbuild/\nlogs/\n.env' > .gitIgnore && \
+		printf '{}' > .prettierrc.json && printf 'node_modules/ \nbuild/ \nlogs/ \nprisma/migrations/**/ \n.env' > .gitIgnore && \
 		npm pkg set scripts.prepare="husky install" &&  \
 		npx eslint --init && git init &&  \
+		npx prisma init --datasource-provider mysql && \
 		npm run prepare && npx husky add .husky/pre-commit "npm run lint" && \
 		npm pkg delete scripts.prepare && \
 		tsc --init || PVALUE=1 
