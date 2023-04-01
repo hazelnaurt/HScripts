@@ -1,0 +1,1104 @@
+{
+  "Snippet Prefixes": {
+    "prefix": "snips",
+    "body": [
+      "/*",
+      "--------- General ---------",
+      "i = Setups Installs + folder/file creation",
+      "i-rand = Random generators",
+      "gf = Arrow function with parameters",
+      "",
+      "typed = Type Definition",
+      "app-reducer = Type Definition For Action Reducer",
+      "inter = Interface",
+      "interex = Interface extends Interface",
+      "",
+      "imp = Import Module",
+      "env = Environment Variables",
+      "err = Error solutions",
+      "cus = Custom helper functions",
+      "pkg = package.json snippets",
+      "tst = jest, cypress, supertest",
+      "",
+      "--------- FRONTEND ---------",
+      "rc = React",
+      "rc-route = React Router",
+      "cnf = Internal Configurations",
+      "config = 3rd parth packages configurations",
+      "muf = Material UI + Hookform",
+      "mui = Material UI",
+      "rdx = Redux",
+      "ax = Axios",
+      "u = hooks",
+      "gc = React onClick",
+      "gv = React value + onChange",
+      "gsw = Switch case option for Reducer",
+      "auth123 = Custom Authentication",
+      "nxt = Next JS",
+      "nxt-app = Next JS _App configs",
+      "",
+      "-------- BACKEND ----------",
+      "exp = Express",
+      "utils = Utilities",
+      "middle = Middlewares",
+      "mysql = MYSQL",
+      "squel = Sequelize",
+      "eslint = eslint",
+      "---------- CLOUD ----------",
+      "aws = Amazon web services",
+      "*/"
+    ],
+    "description": "Snippet Prefixes"
+  },
+  "AWS EC2 setup": {
+    "prefix": "aws_ec2_setup",
+    "body": [
+      "mkdir -p scripts && \\",
+      "touch scripts/application_start.sh scripts/application_stop.sh scripts/before_install.sh appspec.yml start.sh"
+    ],
+    "description": "AWS EC2 setup"
+  },
+  "AWS EC2 install CodeDeploy Agent": {
+    "prefix": "aws_ec2_usrd_codedeploy",
+    "body": [
+      "#!/bin/bash",
+      "sudo apt -y update",
+      "sudo apt -y install ruby",
+      "sudo apt -y install wget",
+      "cd /home/ubuntu",
+      "wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install",
+      "sudo chmod +x ./install",
+      "sudo ./install auto",
+      "",
+      "printf \"[Unit]",
+      "Description=${1:appName}",
+      "After=multi-user.target",
+      "",
+      "[Service]",
+      "ExecStart=/home/ubuntu/${1:appName}/start.sh",
+      "Restart=always",
+      "RestartSec=10",
+      "StandardOutput=syslog",
+      "StandardError=syslog",
+      "SyslogIdentifier=${1:appName}",
+      "User=ubuntu",
+      "EnvironmentFile=/etc/default/${1:appName}-env",
+      "",
+      "[Install]",
+      "WantedBy=multi-user.target\" >> /etc/systemd/system/${1:appName}.service",
+      "",
+      "printf \"",
+      "${2:envVariables}",
+      "\" >> /etc/default/${1:appName}-env"
+    ],
+    "description": "AWS EC2 install CodeDeploy Agent"
+  },
+  "Env Mailer": {
+    "prefix": "env-mailer",
+    "body": ["USER_MAIL=", "PASS_MAIL="],
+    "description": "Env Mailer"
+  },
+  "Env Web3": {
+    "prefix": "env-web3",
+    "body": ["INFURA="],
+    "description": "Env Web3"
+  },
+  "Nxt Apollo Install": {
+    "prefix": "nxt-apollo-install",
+    "body": [
+      "touch lib/apollo-client.ts",
+      "npm i @apollo/client deepmerge lodash @apollo/link-error",
+      "npm i -D @types/lodash",
+      "# npm i @apollo/react-common @apollo/react-hooks graphql graphql-upload apollo-upload-client"
+    ],
+    "description": "Nxt Apollo Install"
+  },
+  "Find file with Extension": {
+    "prefix": "g-find-all",
+    "body": [
+      "// npm i glob && npm i -D @tpyes/glob",
+      "import glob from \"glob\";",
+      "",
+      "glob(__dirname + \"${1:path}\", {}, (err, files) => {",
+      "  console.log(files);",
+      "});"
+    ],
+    "description": "Find file with Extension"
+  },
+  "Graph Config defaults": {
+    "prefix": "cnf-defaults-graph",
+    "body": [
+      "import * as dotenv from \"dotenv\";",
+      "dotenv.config();",
+      "",
+      "export default {",
+      "  graphEndPoint: \"/graphql\",",
+      "  port: process.env.PORT,",
+      "  host: process.env.HOST || \"\",",
+      "  accessTimeOut: \"30s\",",
+      "  refreshTimeOut: \"1m\",",
+      "  cookieName: \"auth\",",
+      "};"
+    ],
+    "description": "Graph Config defaults"
+  },
+  "Install Chance ": {
+    "prefix": "i-rand-chance",
+    "body": [
+      "npm i -D chance @types/chance",
+      "",
+      "// Usage ",
+      "// import Chance from 'chance'",
+      "",
+      "// Chance().first()"
+    ],
+    "description": "Install Chance "
+  },
+  "HookForm + Yup install": {
+    "prefix": "i-hookform",
+    "body": ["@hookform/resolvers react-hook-form yup && npm i -D @types/yup"],
+    "description": "HookForm + Yup install"
+  },
+  "Package ts-node": {
+    "prefix": "pkg-tsnode",
+    "body": [
+      "\"start\": \"node ./build/server.js\"",
+      "\"dev\": \"tsnd --respawn ./src/server.ts\"",
+      "\"postinstall\": \"tsc\""
+    ],
+    "description": "Package ts-node"
+  },
+  "Cypress verification timed out": {
+    "prefix": "err-cypress-timeout",
+    "body": [
+      "// https://blog.saeloun.com/2022/02/04/cypress-9.2.0-new-env-variable-cypress_verify_timeout-introduced",
+      "${1|set,export|} CYPRESS_VERIFY_TIMEOUT=100000",
+      "npx cypress verify"
+    ],
+    "description": "Cypress verification timed out"
+  },
+  "Install Scoop windows": {
+    "prefix": "i-scoop",
+    "body": [
+      "// https://community.wappler.io/t/scoop-installer-failed/40795/2",
+      "// Open powershell and paste the ff",
+      "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser",
+      "iwr -useb get.scoop.sh -outfile 'install.ps1'",
+      ".install.ps1 -RunAsAdmin"
+    ],
+    "description": "Install Scoop windows"
+  },
+  "Install PlatformSH": {
+    "prefix": "i-platsh",
+    "body": [
+      "// https://github.com/platformsh-templates/strapi4",
+      "// Install from template link above OR commands below",
+      "yarn add platformsh-config mysql knex && \\",
+      "mkdir -p .platform && \\",
+      "touch .platform/routes.yaml .platform/services.yaml .platform.app.yaml"
+    ],
+    "description": "Install PlatformSH"
+  },
+  "Switch Case option": {
+    "prefix": "gsw",
+    "body": ["case \"${1:value}\":", "  return ${2:};"],
+    "description": "Switch Case option"
+  },
+  "tail install": {
+    "prefix": "i-tail",
+    "body": [
+      "npm i -D autoprefixer@latest postcss@latest tailwindcss@latest && \\",
+      "npx tailwindcss init -p && rm styles/global.css && \\",
+      "mv -0 tailwindcss.config.js && \\",
+      "printf '@tailwind base;\\n@tailwind components;\\n@tailwind utilities;' > styles/global.css"
+    ],
+    "description": "tail install"
+  },
+  "Auth123 install with files": {
+    "prefix": "i-auth123",
+    "body": [
+      "npm i axios date-fns && \\",
+      "mkdir -p src/api src/auth123 && \\",
+      "touch src/api/axios.ts src/auth123/useInterceptors.tsx \\",
+      "src/auth123/useAuth123.tsx src/auth123/useRefresh.tsx \\",
+      "src/auth123/PrivateRouteAU.tsx src/auth123/PrivateLoadingAU.tsx"
+    ],
+    "description": "Auth123 install with files"
+  },
+  "Mongod config": {
+    "prefix": "cnf-mongod",
+    "body": [
+      "storage:",
+      "    dbPath: ${1:}",
+      "net:",
+      "    bindIp: ${2:}",
+      "    port: ${3:}",
+      "security:",
+      "    authorization: enabled",
+      "    keyFile: ${4:}",
+      "systemLog:",
+      "    destination: file",
+      "    path: ${5:}",
+      "${6:processManagement:",
+      "    fork: true}",
+      "replication:",
+      "    replSetName: \"${7:}\" "
+    ],
+    "description": "Mongod config"
+  },
+  "Tailwind intelli not loading": {
+    "prefix": "tailwind-intelli-not-loading",
+    "body": [
+      "// mkdir .vscode && touch .vscode/settings.json",
+      "{",
+      "  \"tailwindCSS.includeLanguages\": {",
+      "    \"javascript\": \"javascript\",",
+      "    \"css\": \"css\",",
+      "    \"html\": \"html\"",
+      "  },",
+      "  \"editor.quickSuggestions\": {",
+      "    \"strings\": true",
+      "  }",
+      "}"
+    ],
+    "description": "Tailwind intelli not loading"
+  },
+  "Modulo": {
+    "prefix": "cus-mod",
+    "body": ["function mod(n, m) {", "    return ((n % m) + m) % m;", "}"],
+    "description": "Modulo"
+  },
+  "Redux Install": {
+    "prefix": "i-redux",
+    "body": [
+      "mkdir -p src/redux && touch src/redux/store.ts && \\",
+      "npm i @reduxjs/toolkit react-redux // redux-persist"
+    ],
+    "description": "Redux Install"
+  },
+  "Charts Install": {
+    "prefix": "i-chartjs",
+    "body": ["npm i chart.js react-chartjs-2"],
+    "description": "Charts Install"
+  },
+  "Node-Config Import": {
+    "prefix": "imp-node-config",
+    "body": [
+      "import * as dotenv from \"dotenv\";",
+      "import path from \"path\";",
+      "dotenv.config();",
+      "process.env[\"NODE_CONFIG_DIR\"] = path.resolve(__dirname, \"config\");",
+      "import config from \"config\";"
+    ],
+    "description": "Node-Config Import"
+  },
+  "Charts Import": {
+    "prefix": "imp-chartjs",
+    "body": [
+      "import { Chart as ChartJS, registerables } from 'chart.js';",
+      "ChartJS.register(...registerables);"
+    ],
+    "description": "Charts Import"
+  },
+  "Router Dom Import": {
+    "prefix": "imp-router",
+    "body": ["import { Route, Routes } from \"react-router-dom\";"],
+    "description": "Router Dom Import"
+  },
+  "Eslint Nextjs": {
+    "prefix": "config-eslint-nxt",
+    "body": [
+      "{",
+      "  \"root\": true,",
+      "  \"parser\": \"@typescript-eslint/parser\",",
+      "  \"parserOptions\": {",
+      "    \"ecmaVersion\": \"latest\",",
+      "    \"ecmaFeatures\": {",
+      "      \"jsx\": true",
+      "    }",
+      "  },",
+      "  \"extends\": [",
+      "    \"next\",",
+      "    \"next/core-web-vitals\",",
+      "    \"eslint:recommended\",",
+      "    \"plugin:@typescript-eslint/recommended\"",
+      "  ],",
+      "  \"overrides\": [",
+      "    // Only uses Testing Library lint rules in test files",
+      "    {",
+      "      \"files\": [",
+      "        \"**/__tests__/**/*.[jt]s?(x)\",",
+      "        \"**/?(*.)+(spec|test).[jt]s?(x)\"",
+      "      ],",
+      "      \"extends\": [",
+      "        \"plugin:testing-library/react\",",
+      "        \"plugin:jest-dom/recommended\"",
+      "      ],",
+      "      \"rules\": {",
+      "        \"testing-library/no-render-in-setup\": \"error\",",
+      "        \"testing-library/no-wait-for-empty-callback\": \"error\",",
+      "        \"testing-library/prefer-explicit-assert\": \"error\",",
+      "        \"testing-library/prefer-presence-queries\": \"error\",",
+      "        \"testing-library/prefer-screen-queries\": \"error\",",
+      "        \"testing-library/prefer-wait-for\": \"error\"",
+      "      }",
+      "    }",
+      "  ]",
+      "}"
+    ],
+    "description": "Eslint Nextjs"
+  },
+  "Eslint Node": {
+    "prefix": "config-eslint-node",
+    "body": [
+      "{",
+      "  \"root\": true,",
+      "  \"parser\": \"@typescript-eslint/parser\",",
+      "  \"parserOptions\": {",
+      "    \"ecmaVersion\": \"latest\",",
+      "    \"sourceType\": \"module\"",
+      "  },",
+      "  \"plugins\": [\"@typescript-eslint\"],",
+      "  \"env\": {",
+      "    \"browser\": true,",
+      "    \"es2021\": true",
+      "  },",
+      "  \"extends\": [\"eslint:recommended\", \"plugin:@typescript-eslint/recommended\"],",
+      "  \"rules\": {}",
+      "}",
+      ""
+    ],
+    "description": "Eslint Node"
+  },
+  "TSconfig Next Cypress": {
+    "prefix": "config-tsconfig-nxt-cy",
+    "body": [
+      "{",
+      "  \"compilerOptions\": {",
+      "    \"target\": \"es5\",",
+      "    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],",
+      "    \"allowJs\": true,",
+      "    \"skipLibCheck\": true,",
+      "    \"strict\": true,",
+      "    \"forceConsistentCasingInFileNames\": true,",
+      "    \"noEmit\": true,",
+      "    \"esModuleInterop\": true,",
+      "    \"module\": \"esnext\",",
+      "    \"moduleResolution\": \"node\",",
+      "    \"resolveJsonModule\": true,",
+      "    \"isolatedModules\": true,",
+      "    \"jsx\": \"preserve\",",
+      "    \"incremental\": true,",
+      "    \"baseUrl\": \".\",",
+      "    \"paths\": {",
+      "      \"@/components/*\": [\"components/*\"],",
+      "      \"@/lib/*\": [\"lib/*\"],",
+      "      \"@/pages/*\": [\"pages/*\"],",
+      "      \"@/styles/*\": [\"styles/*\"]",
+      "    },",
+      "    \"types\": [\"cypress\", \"@testing-library/cypress\"]",
+      "  },",
+      "  \"include\": [\"next-env.d.ts\", \"**/*.ts\", \"**/*.tsx\", \"types.d.ts\", \"cypress\"],",
+      "  \"exclude\": [\"node_modules\"]"
+    ],
+    "description": "TSconfig Next Cypress"
+  },
+  "Tsconfig Node": {
+    "prefix": "config-tsconfig-node",
+    "body": [
+      "{",
+      "  \"compilerOptions\": {",
+      "    \"target\": \"es2016\",",
+      "    \"module\": \"commonjs\",",
+      "    \"moduleResolution\": \"node\",",
+      "    \"resolveJsonModule\": true,",
+      "    \"outDir\": \"./build\",",
+      "    \"esModuleInterop\": true,",
+      "    \"forceConsistentCasingInFileNames\": true,",
+      "    \"strict\": true,",
+      "    \"skipLibCheck\": true",
+      "  },",
+      "  \"include\": [\"src/**/*\", \"__tests__\"],",
+      "  \"exclude\": [\"node_modules\"]",
+      "}"
+    ],
+    "description": "Tsconfig Node"
+  },
+  "Eslint override": {
+    "prefix": "eslint-over",
+    "body": [
+      "// Only uses Testing Library lint rules in test files",
+      "{",
+      "  \"files\": [",
+      "    \"**/__tests__/**/*.[jt]s?(x)\",",
+      "    \"**/?(*.)+(spec|test).[jt]s?(x)\"",
+      "  ],",
+      "  \"extends\": [",
+      "    \"plugin:testing-library/react\",",
+      "    \"plugin:jest-dom/recommended\"",
+      "  ],",
+      "  \"rules\": {",
+      "    \"testing-library/no-render-in-setup\": \"error\",",
+      "    \"testing-library/no-wait-for-empty-callback\": \"error\",",
+      "    \"testing-library/prefer-explicit-assert\": \"error\",",
+      "    \"testing-library/prefer-presence-queries\": \"error\",",
+      "    \"testing-library/prefer-screen-queries\": \"error\",",
+      "    \"testing-library/prefer-wait-for\": \"error\"",
+      "  }",
+      "}"
+    ],
+    "description": "Eslint override"
+  },
+  "Wysiwyg install": {
+    "prefix": "i-wysiwyg",
+    "body": [
+      "npm i react-draft-wysiwyg draftjs-to-html html-to-draftjs draft-js && \\",
+      "npm i -D @types/react-draft-wysiwyg @types/draftjs-to-html @types/html-to-draftjs @types/draft-js"
+    ],
+    "description": "Wysiwyg install"
+  },
+  "Cypres Install": {
+    "prefix": "i-cypress",
+    "body": ["npm i -D cypress @testing-library/cypress"],
+    "description": "Cypres Install"
+  },
+  "material install": {
+    "prefix": "i-mat",
+    "body": [
+      "npm i @mui/material @emotion/react @emotion/styled @mui/icons-material @mui/base @mui/lab"
+    ],
+    "description": "material install"
+  },
+  "General Func": {
+    "prefix": "gf",
+    "body": [
+      "const ${1:funcName} = ${2:async} (${3:params}) => {",
+      "  ${4}",
+      "};"
+    ],
+    "description": "General Func"
+  },
+  "General Value onChange": {
+    "prefix": "gv",
+    "body": ["value={${1:val}} onChange={(${2:params}) => ${3:action}}"],
+    "description": "General Value onChange"
+  },
+  "General onClick": {
+    "prefix": "gc",
+    "body": ["onClick={(${1:params}) => ${2:action}}"],
+    "description": "General Value change"
+  },
+  "Heroku Remote": {
+    "prefix": "hero-r",
+    "body": ["heroku git:remote -a ${1:appName}"],
+    "description": "Heroku Remote"
+  },
+  "Heroku Git branch": {
+    "prefix": "hero-b",
+    "body": ["heroku create -b ${1:gitAddress}"],
+    "description": "Heroku Git branch"
+  },
+  "Heroku Node setup": {
+    "prefix": "hero-setup",
+    "body": [
+      "touch Procfile && printf \"worker: npm start\" > Procfile && \\",
+      "npm set-script postinstall \"npm run build\""
+    ],
+    "description": "Heroku Node setup"
+  },
+  "Heroku pkj engine": {
+    "prefix": "hero-e",
+    "body": ["\"engines\": {", "  \"node\": \"16.x\"", "},"],
+    "description": "Heroku pkj engine"
+  },
+  "Netlify Routing solution": {
+    "prefix": "netlify-s",
+    "body": [
+      "printf \"[[redirects]] \\n from = '/*' \\n to = '/index.html' \\n status = 200\" > netlify.toml"
+    ],
+    "description": "Netlify Routing solution"
+  },
+  "Jest Config": {
+    "prefix": "config-jest",
+    "body": [
+      "export default {",
+      "  testEnvironment: \"jsdom\",",
+      "  setupFilesAfterEnv: [\"<rootDir>/jest.setup.ts\"],",
+      "  transform: {",
+      "    \"^.+\\\\.(ts|tsx)?$\": \"ts-jest\",",
+      "  },",
+      "  moduleNameMapper: {",
+      "    \"\\\\.(jpg|jpeg|svg|ttf|png|gif)$\": \"<rootDir>/src/__mocks__/fileMock.js\",",
+      "    \"\\\\.(css|less)$\": \"identity-obj-proxy\",",
+      "  },",
+      "};"
+    ],
+    "description": "Jest Config"
+  },
+  "Nodemon Config": {
+    "prefix": "config-nodemon",
+    "body": [
+      "{",
+      "    \"restartable\":\"rs\",",
+      "    \"ignore\": [\".git\",\"node_modules/\",\"dist/\",\"coverage/\"],",
+      "    \"watch\": [\"src/\"],",
+      "    \"execMap\": {",
+      "        \"ts\": \"node -r ts-node/register\"",
+      "    },",
+      "    \"env\": {",
+      "        \"NODE_ENV\":\"development\"",
+      "    },",
+      "    \"ext\": \"js,json,ts\"",
+      "}"
+    ],
+    "description": "Nodemon Config"
+  },
+  "Next Js Config": {
+    "prefix": "cfn-next",
+    "body": [
+      "/** @type {import('next').NextConfig} */",
+      "module.exports = {",
+      "  reactStrictMode: true,",
+      "  experimental: { appDir: true },",
+      "};"
+    ],
+    "description": "Next Js Config"
+  },
+  "tail config": {
+    "prefix": "config-tail",
+    "body": [
+      "/** @type {import('tailwindcss').Config} */",
+      "module.exports = {",
+      "  content: [",
+      "    \"./pages/**/*.{js,ts,jsx,tsx}\",",
+      "    \"./components/**/*.{js,ts,jsx,tsx}\",",
+      "  ],",
+      "  theme: {",
+      "    extend: {},",
+      "  },",
+      "  plugins: [],",
+      "};"
+    ],
+    "description": "tail config"
+  },
+  "MComment": {
+    "prefix": "mc",
+    "body": ["////////////////////////////////////", "/// ${1}"],
+    "description": "MComment"
+  },
+  "React client Addon": {
+    "prefix": "i-vite",
+    "body": [
+      "npm i @mui/material @emotion/react @emotion/styled @mui/icons-material react-router-dom && \\",
+      "mkdir -p src/components src/components/shared src/hooks src/api public && \\",
+      "touch .env.local .prettierrc.json public/robots.txt && \\",
+      "rm -rf src/App.css src/logo.svg && \\",
+      "printf '{}' > .prettierrc.json && printf 'User-agent:* \\nAllow: /' > public/robots.txt"
+    ],
+    "description": "React client Addon"
+  },
+  "NextJS AddOns": {
+    "prefix": "i-nxt-add",
+    "body": [
+      "npm i -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser next-sitemap \\",
+      "husky msw eslint-config-next eslint-plugin-testing-library eslint-plugin-jest-dom && \\",
+      "rm -rf __tests__/* styles/* pages/index.module.css && mkdir -p components lib hooks context && \\",
+      "touch .env.local .env.template .prettierrc.json next-sitemap.config.js lib/auth.ts next.config.js \\",
+      "context/AppContentProvider.tsx content/AppReducer.ts hooks/useAppContext.tsx hooks/useAuth.tsx && \\",
+      "printf '{}' > .prettierrc.json && \\",
+      "printf '\\n\\n# seo\\npublic/robots.txt\\npublic/sitemap.xml' >> .gitignore && \\",
+      "npm set-script lint \"next lint\" && \\",
+      "npm set-script postinstall \"next-sitemap\" && \\",
+      "npm set-script prepare \"husky install\" &&  \\",
+      "npm run prepare && npx husky add .husky/pre-commit \"npm run lint\" && \\",
+      "npm pkg delete scripts.prepare"
+    ],
+    "description": "NextJS AddOns"
+  },
+  "Expo AddOns": {
+    "prefix": "i-expo-add",
+    "body": [
+      "mv App.js App.tsx && \\",
+      "npm install -D @types/react @types/react-native @types/expo && \\",
+      "tsc --init"
+    ],
+    "description": "Expo AddOns"
+  },
+  "Express API": {
+    "prefix": "i-express",
+    "body": [
+      "npm init && \\",
+      "npm pkg delete scripts.test && npm set-script test \"jest\" && npm set-script build \"tsc\" && \\",
+      "npm pkg delete main && npm pkg set main=\"build/src/server.js\" &&",
+      "npm set-script dev:test \"NODE_ENV=test ts-node-dev --respawn src/server.ts\" && \\",
+      "npm set-script dev \"ts-node-dev --respawn src/server.ts\" && npx ts-jest config:init && \\",
+      "npm set-script start \"node build/src/server.js\" && npm set-script lint \"eslint src/**/**/*.ts\" && ",
+      "npm i express config dotenv jsonwebtoken cookie-parser mysql2 helmet bcryptjs yup winston \\",
+      "swagger-jsdoc swagger-ui-express ts-node typescript && \\",
+      "npm i -D @types/express @types/config @types/node ts-node-dev \\",
+      "@types/jsonwebtoken @types/cookie-parser @types/mysql @types/bcryptjs \\",
+      "supertest jest ts-jest @types/jest @types/supertest @typescript-eslint/parser \\",
+      "eslint husky @types/swagger-jsdoc @types/swagger-ui-express && \\",
+      "mkdir -p config SQL src src/schema src/models src/middleware src/services src/routes \\",
+      "src/controllers src/utils __tests__ && \\",
+      "touch .env .env.template .gitIgnore .prettierrc.json \\",
+      "config/production.ts config/development.ts config/test.ts src/app.ts src/server.ts \\",
+      "src/middleware/verifyAccess.ts src/middleware/verifyRefresh.ts \\",
+      "src/utils/auth.utils.ts src/utils/db.ts src/utils/token.utils.ts src/utils/swagger.ts src/utils/logger.ts && \\",
+      "printf '{}' > .prettierrc.json && printf 'node_modules/ \\nbuild/\\nlogs/\\n.env' > .gitIgnore && \\",
+      "npm set-script prepare \"husky install\" &&  \\",
+      "tsc --init && npx eslint --init && ",
+      "npm run prepare && npx husky add .husky/pre-commit \"npm run lint\" && \\",
+      "npm pkg delete scripts.prepare"
+    ],
+    "description": "Express API"
+  },
+  "Express API2 AddOns": {
+    "prefix": "i-express-api2-add",
+    "body": ["npm i cors && npm i -D @types/cors && touch src/utils/cors.ts"],
+    "description": "Express API2 AddOns"
+  },
+  "Vite Dependencies Addon": {
+    "prefix": "i-vite-add",
+    "body": [
+      "npm i @mui/material @emotion/react @emotion/styled @mui/icons-material @mui/base @mui/lab react-router-dom && \\",
+      "mkdir -p src/components src/components/shared public && \\",
+      "touch .env.local .prettierrc.json public/robots.txt && \\",
+      "rm -rf src/App.css src/logo.svg && \\",
+      "printf '{}' > .prettierrc.json && printf 'User-agent:* \\nAllow: /' > public/robots.txt"
+    ],
+    "description": "Vite Dependencies Addon"
+  },
+  "Jest Setup": {
+    "prefix": "i-jest",
+    "body": [
+      "npm i -D jest @types/jest ts-node ts-jest identity-obj-proxy jest-environment-jsdom \\",
+      "@testing-library/jest-dom @testing-library/react @testing-library/user-event && \\",
+      "mkdir -p src/__mocks__ && \\",
+      "touch src/__mocks__/fileMock.ts jest.config.ts jest.setup.ts && \\",
+      "printf 'export default \"test-file-stub\";' >> src/__mocks__/fileMock.ts && \\",
+      "printf 'import \"@testing-library/jest-dom/extend-expect\"' >> jest.setup.ts"
+    ],
+    "description": "Jest Setup"
+  },
+  "Jest Describe": {
+    "prefix": "tst-jd",
+    "body": ["describe(\"${1:title}\", () => {", "   ${2}", "})"],
+    "description": "Jest Describe"
+  },
+  "Jest It": {
+    "prefix": "tst-ji",
+    "body": ["it(\"${1:title}\", ${2:async} () => {", "   ${3}", "})"],
+    "description": "Jest It"
+  },
+  "Jest Test": {
+    "prefix": "tst-jt",
+    "body": ["test(\"${1:title}\", ${2:async} () => {", "   ${3}", "})"],
+    "description": "Jest It"
+  },
+  "Jest Supertest": {
+    "prefix": "tst-super",
+    "body": [
+      "const { statusCode ${1:,body} } = await supertest(app).get(",
+      "  `${2:uri}`",
+      ");",
+      "expect(statusCode).toBe(${3:statusCode});",
+      "expect(body).toEqual(${4:body});"
+    ],
+    "description": "Jest Supertest"
+  },
+  "Test MSW handler setup": {
+    "prefix": "tst-msw-set-handler",
+    "body": [
+      "import { rest } from \"msw\";",
+      "",
+      "export const handlers = [",
+      "",
+      "];"
+    ],
+    "description": "Test MSW handler setup"
+  },
+  "Test MSW server setup": {
+    "prefix": "tst-msw-set-server",
+    "body": [
+      "import { setupServer } from \"msw/node\";",
+      "import { handlers } from \"./handlers\";",
+      "",
+      "export const server = setupServer(...handlers);"
+    ],
+    "description": "Test MSW server setup"
+  },
+  "Test MSW jest setup": {
+    "prefix": "tst-msw-set-jest",
+    "body": [
+      "import { server } from \"./__tests__/__mocks__/msw/server\";",
+      "",
+      "// Establish API mocking before all tests.",
+      "beforeAll(() => server.listen());",
+      "// Reset any request handlers that we may add during the tests,",
+      "// so they don't affect other tests.",
+      "afterEach(() => server.resetHandlers());",
+      "// Clean up after the tests are finished.",
+      "afterAll(() => server.close());"
+    ],
+    "description": "Test MSW jest setup"
+  },
+  "Test MSW handler": {
+    "prefix": "tst-msw-hdl",
+    "body": [
+      "rest.get(\"${1:url}\", (req, res, ctx) => {",
+      "  ${2:}",
+      "  return res(ctx.json({ ${3:} }));",
+      "});"
+    ],
+    "description": "Test MSW handler"
+  },
+  "Test disable js for ISR": {
+    "prefix": "tst-isr-disable-js",
+    "body": [
+      "it(\"skips client-side bundle, confirm data from ISR cache\", () => {",
+      "  cy.request(\"${1:/}\")",
+      "    .its(\"body\")",
+      "    .then((html) => {",
+      "      const staticHtml = html.replace(\"<script src='/bundle.js'></script>\", \"\");",
+      "      cy.state(\"document\").write(staticHtml);",
+      "    });",
+      "",
+      "  ${2:}",
+      "});"
+    ],
+    "description": "Test disable js for ISR"
+  },
+  "Express Config defaults": {
+    "prefix": "cnf-defaults",
+    "body": [
+      "import * as dotenv from \"dotenv\";",
+      "dotenv.config();",
+      "",
+      "export default {",
+      "  baseEndPoint: \"/api/v1\",",
+      "  siteUrl: `http://${process.env.HOST}:${process.env.PORT}/api/v1`,",
+      "  port: process.env.PORT,",
+      "  host: process.env.HOST || \"\",",
+      "  roles: {",
+      "    admin: 101,",
+      "    user: 102,",
+      "  },",
+      "  accessTimeOut: \"30s\",",
+      "  refreshTimeOut: \"1m\",",
+      "  cookieName: \"auth\",",
+      "};"
+    ],
+    "description": "Express Config defaults"
+  },
+  "Config mysql": {
+    "prefix": "cnf-mysql",
+    "body": [
+      "db_host: process.env.MYSQL_HOST,",
+      "db_user: process.env.MYSQL_USER,",
+      "db_database: process.env.MYSQL_DB,",
+      "db_password: process.env.MYSQL_PASS,"
+    ],
+    "description": "Config mysql"
+  },
+  "Env defaults": {
+    "prefix": "env-defaults",
+    "body": [
+      "#------------- Default",
+      "PORT=",
+      "HOST=",
+      "",
+      "",
+      "#------------- Test",
+      "TEST_PORT=",
+      "TEST_HOST="
+    ],
+    "description": "Env defaults"
+  },
+  "Env vite baseurl": {
+    "prefix": "env-vite",
+    "body": ["VITE_BASEURL="],
+    "description": "Env vite baseurl"
+  },
+  "Env Secrets": {
+    "prefix": "env-secret",
+    "body": ["ACCESS_SECRET=", "REFRESH_SECRET="],
+    "description": "Env Secrets"
+  },
+  "Env Mysql": {
+    "prefix": "env-mysql",
+    "body": ["MYSQL_HOST=", "MYSQL_USER=", "MYSQL_PASS=", "MYSQL_DB="],
+    "description": "Env Mysql"
+  },
+  "Env Cypress baseurl": {
+    "prefix": "env-cypress",
+    "body": ["CYPRESS_baseUrl="],
+    "description": "Env Cypress baseurl"
+  },
+  "Env Next Revalidate token": {
+    "prefix": "env-nxt-revalidate-secret",
+    "body": ["REVALIDATE_TOKEN="],
+    "description": "Env Next Revalidate token"
+  },
+  "Git Files associated with commit": {
+    "prefix": "git-file",
+    "body": ["git diff-tree --no-commit-id --name-only -r"],
+    "description": "Git Files associated with commit"
+  },
+  "Interface definition": {
+    "prefix": "inter",
+    "body": ["export interface ${1:name} {}"],
+    "description": "Interface definition"
+  },
+  "Interface definition extends": {
+    "prefix": "interex",
+    "body": ["export interface ${1:name} extends ${2:interfaces} {}"],
+    "description": "Interface definition extends"
+  },
+  "Type definition": {
+    "prefix": "typed",
+    "body": ["${1:export} type ${2:name} = {", "    ${3:}", "}"],
+    "description": "Type definition"
+  },
+  "Main Update": {
+    "prefix": "main-upd",
+    "body": [
+      "import React from \"react\";",
+      "import ReactDOM from \"react-dom/client\";",
+      "import App from \"./App\";",
+      "import \"./index.css\";",
+      "import { BrowserRouter } from \"react-router-dom\";",
+      "import { Provider } from \"react-redux\";",
+      "import { store } from \"./redux/store\";",
+      "",
+      "ReactDOM.createRoot(document.getElementById(\"root\")!).render(",
+      "  <React.StrictMode>",
+      "    <BrowserRouter>",
+      "      <Provider store={store}>",
+      "        <App />",
+      "      </Provider>",
+      "    </BrowserRouter>",
+      "  </React.StrictMode>",
+      ");"
+    ],
+    "description": "Main Update"
+  },
+  "Nginx Boiler Plate": {
+    "prefix": "ngx",
+    "body": [
+      "server {",
+      "    listen       80;",
+      "    listen       [::]:80;",
+      "    server_name  ${1:servverName};",
+      "    #root  /home/user/site/public;",
+      "",
+      "    proxy_set_header Host $http_host;",
+      "    proxy_set_header X-Real-IP $remote_addr;",
+      "    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;",
+      "",
+      "    location / {",
+      "        proxy_pass \"http://${2:localhost:8080}/\";",
+      "    }",
+      "",
+      "    error_page 404 /404.html;",
+      "        location = /40x.html {",
+      "    }",
+      "",
+      "    error_page 500 502 503 504 /50x.html;",
+      "        location = /50x.html {",
+      "    }",
+      "}"
+    ],
+    "description": "Nginx Boiler Plate"
+  },
+  "Nginx Web Socket": {
+    "prefix": "ngxs",
+    "body": [
+      "location /socket.io/ {",
+      "    proxy_http_version 1.1;",
+      "    proxy_set_header Upgrade $http_upgrade;",
+      "    proxy_set_header Connection \"upgrade\";",
+      "    proxy_pass \"http://${1:host}/socket.io/\";",
+      "}"
+    ],
+    "description": "Nginx Web Socket"
+  },
+  "Nginx location block": {
+    "prefix": "ngxl",
+    "body": [
+      "location /${1:name}/ {",
+      "    proxy_pass \"http://${1:host}/${1:name}/\";",
+      "}"
+    ],
+    "description": "Nginx location block"
+  },
+  "Nginx SSL": {
+    "prefix": "ngxssl",
+    "body": [
+      "ssl_certificate /etc/letsencrypt/live/${1:domainName}/fullchain.pem;",
+      "ssl_certificate_key /etc/letsencrypt/live/${1:domainName}/privkey.pem;"
+    ],
+    "description": "Nginx location block"
+  },
+  "Nginx Upstream": {
+    "prefix": "ngxup",
+    "body": [
+      "upstream ${1:host} {",
+      "    ip_hash;",
+      "    server ${2:localhost:0001};",
+      "    server ${3:localhost:0002};",
+      "}"
+    ],
+    "description": "Nginx Upstream"
+  },
+  "Git Helper": {
+    "prefix": "git-help",
+    "body": [
+      "// https://itsmycode.com/support-for-password-authentication-was-removed-github/#:~:text=Starting%20from%20August%2013%2C%2020201,authenticating%20and%20performing%20Git%20operations.&text=from%20GitHub%20stating-,remote%3A%20Support%20for%20password%20authentication%20was%20removed%20on%20August%2013,a%20personal%20access%20token%20instead.",
+      "// Cache the token in your computer with the below command ",
+      "git config --global credential.helper cache",
+      "",
+      "// Un cache token",
+      "git config --global --unset credential.helper",
+      "",
+      "// https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase",
+      "// Force the merge to happen",
+      "git pull origin develop --allow-unrelated-histories"
+    ],
+    "description": "Git Helper"
+  },
+  "svg": {
+    "prefix": "svgee",
+    "body": [
+      "<svg style=\"position: absolute; width: 0; height: 0; overflow: hidden;\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">",
+      "  <defs>",
+      "    <symbol id=\"${1:id}\" viewBox=\"0 0 ${2:w h}\">",
+      "    </symbol>",
+      "  </defs>",
+      "</svg>"
+    ],
+    "description": "svg"
+  },
+  "svg symbol": {
+    "prefix": "sym",
+    "body": ["<symbol id=\"${1:id}\" viewBox=\"0 0 ${2:w h}\">", "</symbol>"],
+    "description": "svg symbol"
+  },
+  "Strapi Server config": {
+    "prefix": "str-server",
+    "body": [
+      "module.exports = ({ env }) => ({",
+      "  host: env(\"HOST\", \"${1:0.0.0.0}\"),",
+      "  port: env.int(\"PORT\", 1337),",
+      "  app: {",
+      "    keys: env.array(\"APP_KEYS\", [",
+      "      \"${2:key1}\",",
+      "      \"${3:key2}\",",
+      "    ]),",
+      "  },",
+      "  url: \"${4:url}\",",
+      "});"
+    ],
+    "description": "Strapi Server config"
+  },
+  "Strapi Admin token salt": {
+    "prefix": "str-tokensalt",
+    "body": [
+      "apiToken: {",
+      "  salt: env(\"API_TOKEN_SALT\", \"${1:token}\"),",
+      "},"
+    ],
+    "description": "Strapi Admin token salt"
+  },
+  "Strapi user reset": {
+    "prefix": "str-reset",
+    "body": ["npm run strapi admin:reset-user-password"],
+    "description": "Strapi user reset"
+  },
+  "Strapi Env": {
+    "prefix": "str-evn",
+    "body": [
+      "## Server Settings",
+      "",
+      "HOST=0.0.0.0",
+      "PORT=1337",
+      "APP_KEYS=\"${1:key1},${2:key2},${3:key3},${4:key4}\"",
+      "",
+      "## Admin Settings",
+      "",
+      "API_TOKEN_SALT=",
+      "ADMIN_JWT_SECRET=",
+      "",
+      "## Users-Permissions Plugin Settings",
+      "",
+      "JWT_SECRET=",
+      "",
+      "## Database Settings",
+      "",
+      "DATABASE_HOST=",
+      "DATABASE_PORT=",
+      "DATABASE_NAME=",
+      "DATABASE_USERNAME=",
+      "DATABASE_PASSWORD=",
+      "DATABASE_SSL="
+    ],
+    "description": "Strapi Env"
+  },
+  "Next Sitemap Config": {
+    "prefix": "cnf-nxt-sitemap",
+    "body": [
+      "const url = \"${1:url}\";",
+      "",
+      "module.exports = {",
+      "  siteUrl: url,",
+      "  ${2:exclude: [\"/secret\"],}",
+      "  generateRobotsTxt: true,",
+      "  robotsTxtOptions: {",
+      "    policies: [",
+      "      // nxt-sitemap-policy",
+      "    ],",
+      "    ${3:additionalSitemaps: [`\\${url\\}/sitemap1.xml`],}",
+      "  },",
+      "};"
+    ],
+    "description": "Next Sitemap Config"
+  },
+  "Next Sitemap Policy": {
+    "prefix": "nxt-sitemap-policy",
+    "body": [
+      "{ userAgent: \"${1:*}\", allow: \"${2:/}\", ${3:disallow: \"/secret\"} }"
+    ],
+    "description": "Next Sitemap Policy"
+  },
+  "Next Sitemap Dynamic": {
+    "prefix": "nxt-sitemap-dyn",
+    "body": [
+      "${0:// mkdir -p pages/sitemap1.xml && touch pages/sitemap1.xml/index.tsx}",
+      "",
+      "import axios from \"axios\";",
+      "import { GetServerSideProps } from \"next\";",
+      "import { getServerSideSitemap, ISitemapField } from \"next-sitemap\";",
+      "",
+      "type ReturnType = {",
+      "  ${5:data: [];}",
+      "};",
+      "",
+      "export const getServerSideProps: GetServerSideProps = async (ctx) => {",
+      "  const resp = await axios.get<ReturnType>(\"${1:dynamic path}\");",
+      "",
+      "  const fields: ISitemapField[] = resp.data.data.map((item) => ({",
+      "    loc: \"${2:site url}\",",
+      "    lastmod: new Date().toISOString(),",
+      "    changefreq: \"${3|monthly,weekly,daily|}\",",
+      "    priority: ${4:1},",
+      "  }));",
+      "",
+      "  return getServerSideSitemap(ctx, fields);",
+      "};",
+      "",
+      "// eslint-disable-next-line @typescript-eslint/no-empty-function",
+      "export default function GenSitemap() {}"
+    ],
+    "description": "Next Sitemap Dynamic"
+  }
+}

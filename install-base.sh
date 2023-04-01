@@ -19,15 +19,15 @@ Folder with name already exists, rerun script with a new name!
 		cd $CURRENT_WD/$DIR_NAME
         
 		npm init -y && \
-		sed -i '/main/s|index.js|build/src/index.js|' package.json && \
+		sed "/main/s|index.js|build/src/server.js|" package.json > package.json2 && rm package.json && mv package.json2 package.json && \
 		npm pkg delete scripts.test && npm pkg set scripts.build="tsc" && \
-		npm pkg set scripts.dev="ts-node-dev --respawn src/index.ts" && npx ts-jest config:init && \
+		npm pkg set scripts.dev="ts-node-dev --respawn src/index.ts" && \
 		npm pkg set scripts.start="node build/src/index.js" && \
-		npm i dotenv ts-node typescript && \
-		npm i -D @types/node ts-node-dev && \
-		mkdir -p src \
-		touch .env .gitIgnore src/index.ts \
-		printf 'node_modules/ \nbuild/ \nlogs/ \nprisma/migrations/**/ \n.env' > .gitIgnore && \
+		npm i dotenv && \
+		npm i -D @types/node ts-node-dev ts-node typescript && \
+		mkdir -p src && \
+		touch .env .gitIgnore src/index.ts && \
+		printf 'node_modules/ \nbuild/ \n.env' > .gitIgnore && \
 		tsc --init || PVALUE=1 
 		
 		if [ $PVALUE = 1 ] 
