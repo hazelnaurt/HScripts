@@ -44,6 +44,7 @@
       "mysql = MYSQL",
       "squel = Sequelize",
       "eslint = eslint",
+      "postg = postgres",
       "---------- CLOUD ----------",
       "aws = Amazon web services",
       "*/"
@@ -92,6 +93,16 @@
       "\" >> /etc/default/${1:appName}-env"
     ],
     "description": "AWS EC2 install CodeDeploy Agent"
+  },
+  "Env AWS s3": {
+    "prefix": "env-aws-s3",
+    "body": [
+      "AWS_BUCKET_NAME=",
+      "AWS_BUCKET_REGION=",
+      "AWS_ACCESS_KEY=",
+      "AWS_SECRET_KEY="
+    ],
+    "description": "Env AWS s3"
   },
   "Env Mailer": {
     "prefix": "env-mailer",
@@ -276,6 +287,19 @@
     ],
     "description": "Redux Install"
   },
+  "Babel config": {
+    "prefix": "config-babel",
+    "body": [
+      "{",
+      "    \"presets\": [[\"@babel/preset-env\", { \"targets\": { \"node\": \"current\" } }]],",
+      "    \"plugins\": [",
+      "        [\"@babel/plugin-proposal-decorators\", { \"version\": \"legacy\" }],",
+      "        [\"@babel/plugin-transform-class-properties\", { \"loose\": true }]",
+      "    ]",
+      "}"
+    ],
+    "description": "Babel config"
+  },
   "Charts Install": {
     "prefix": "i-chartjs",
     "body": ["npm i chart.js react-chartjs-2"],
@@ -418,7 +442,7 @@
       "    \"strict\": true,",
       "    \"skipLibCheck\": true",
       "  },",
-      "  \"include\": [\"src/**/*\", \"__tests__\"],",
+      "  \"include\": [\"__tests__\", \"app.ts\", \"server.ts\"],",
       "  \"exclude\": [\"node_modules\"]",
       "}"
     ],

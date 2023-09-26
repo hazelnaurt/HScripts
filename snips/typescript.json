@@ -1,4 +1,81 @@
 {
+  "Swagger Init file": {
+    "prefix": "swag-init",
+    "body": [
+      "import swaggerAutogen from \"swagger-autogen\";",
+      "",
+      "const output = \"./swagger.json\";",
+      "const endpoints = [\"./routes/*.*\"];",
+      "",
+      "const doc = {",
+      "  openapi: \"3.0.0\",",
+      "  info: {",
+      "    title: \"${1:title}\",",
+      "    version: \"${2:1.0.0}\",",
+      "    description:",
+      "      \"${3:description}\",",
+      "    contact: {",
+      "      name: \"${4:name}\",",
+      "      email: \"${5:email}\",",
+      "      url: \"${6:website}\",",
+      "    },",
+      "    license: {",
+      "      name: \"Licensed Under MIT\",",
+      "      url: \"https://spdx.org/licenses/MIT.html\",",
+      "    },",
+      "  },",
+      "  servers: [",
+      "    {",
+      "      url: \"${7:url-production-server}\",",
+      "      description: \"Prod Server\",",
+      "    },",
+      "    {",
+      "      url: \"${8:url-development-server}\",",
+      "      description: \"Dev Server\",",
+      "    },",
+      "  ],",
+      "  securityDefinitions: {",
+      "    api_key: {",
+      "      type: \"apiKey\",",
+      "      name: \"api_key\",",
+      "      in: \"header\",",
+      "    },",
+      "  },",
+      "  tags: [${9:tags}],",
+      "  security: [",
+      "    {",
+      "      bearerAuth: [],",
+      "    },",
+      "  ],",
+      "  components: {",
+      "    schemas: {",
+      "      ${10:entries}",
+      "    },",
+      "  },",
+      "};",
+      "",
+      "swaggerAutogen(output, endpoints, doc)"
+    ],
+    "description": "Swagger Init file"
+  },
+  "Swagger Request Multipart": {
+    "prefix": "swag-request-multipart",
+    "body": [
+      "/* #swagger.requestBody = {",
+      "    \"@content\": {",
+      "        \"multipart/form-data\": {",
+      "            schema: { ",
+      "                type: 'object',",
+      "                properties: {",
+      "                    ${1}",
+      "                }",
+      "            }",
+      "        }",
+      "    }",
+      "} */"
+    ],
+    "description": "Swagger Request Multipart"
+  },
   "Swagger Tag & Description": {
     "prefix": "swag-tag",
     "body": [
@@ -17,8 +94,12 @@
   "Swagger Response w/ Schema": {
     "prefix": "swag-resp-sch",
     "body": [
-      "/* #swagger.responses[${1:statCode}] = { ",
-      "    schema: { $ref: \"#/definitions/${2:schemaName}\" },",
+      "/* #swagger.responses[${1:statCode}] = {",
+      "    content: {",
+      "      \"application/json\": {",
+      "        schema: { \\$ref: \"#/components/schemas/${2:schemaName}\" }",
+      "      }",
+      "    }, ",
       "    description: '${3:description}' ",
       "} */"
     ],
@@ -28,12 +109,25 @@
     "prefix": "swag-param",
     "body": [
       "/* #swagger.parameters['${1:name}'] = {",
-      "    in: '${2|body,query,path|}',",
+      "    in: '${2|query,path|}',",
       "    description: '${3:desc}',",
       "    ${4:required:true}${5:}",
       "} */"
     ],
     "description": "Swagger Parameters"
+  },
+  "Swagger Request": {
+    "prefix": "swag-request",
+    "body": [
+      "/* #swagger.requestBody = {",
+      "      content: {",
+      "        \"application/json\": {",
+      "          schema: { \\$ref: \"#/components/schemas/${1:name}\" }",
+      "        }",
+      "      }",
+      "  } */"
+    ],
+    "description": "Swagger Request"
   },
   "Swagger Schema": {
     "prefix": "swag-sche",
@@ -54,6 +148,35 @@
       "});"
     ],
     "description": "Express Websocket"
+  },
+  "Typeorm database client": {
+    "prefix": "typeorm-cl",
+    "body": [
+      "import { DataSource } from \"typeorm\";",
+      "import dotenv from \"dotenv\";",
+      "dotenv.config();",
+      "",
+      "const connectdb = new DataSource({",
+      "  url: process.env.DATABASE_URL,",
+      "  type: \"postgres\",",
+      "  entities: [__dirname + \"/../entities/*\"],",
+      "  synchronize: true,",
+      "  extra: {",
+      "    ssl: false,",
+      "  },",
+      "});",
+      "",
+      "export const mintdb = async () => {",
+      "  try {",
+      "    await connectdb.initialize();",
+      "    console.log(\"Connected to database\");",
+      "  } catch (error) {",
+      "    console.log(error);",
+      "  }",
+      "};",
+      ""
+    ],
+    "description": "Typeorm database client"
   },
   "Utils Ethers Listener": {
     "prefix": "utils-eth-list",
@@ -855,21 +978,19 @@
       "/* eslint-disable @typescript-eslint/no-explicit-any */",
       "import app from \"./app\";",
       "import http from \"http\";",
-      "import config from \"config\";",
+      "import dotenv from \"dotenv\";",
       "import logger from \"./utils/logger.utils\";",
+      "dotenv.config();",
       "",
-      "const PORT = config.get(\"port\");",
-      "",
-      "const HOST: any = config.get(\"host\");",
+      "const PORT = process.env.PORT",
       "",
       "const server = http.createServer(app);",
       "",
       "const feedback = () => {",
-      "  logger.debug(${1:`Swagger Docs = ${config.get(\"siteUrl\")\\}/docs`})",
+      "  logger.debug(${1:`Swagger Docs @ /docs`})",
       "};",
       "",
-      "if (HOST) server.listen(PORT, HOST, feedback);",
-      "else server.listen(PORT, feedback);"
+      "server.listen(PORT, feedback);"
     ],
     "description": "Express Server"
   },
@@ -1046,10 +1167,29 @@
     ],
     "description": "Express App"
   },
+  "Express Multipart Array Objects": {
+    "prefix": "exp-multipart-arr-obj",
+    "body": [
+      "const ${1:fieldname}N = req.body.${1:fieldname}.split(\",\");",
+      "  const ${2:name} = ${1:fieldname}N.map((item: any) => {",
+      "    return JSON.parse(item);",
+      "  });"
+    ],
+    "description": "Express Multipart Array Objects"
+  },
+  "Express Multipart Remove image b4 upload": {
+    "prefix": "exp-multipart-rm-img",
+    "body": [
+      "if (${1:name}?.filename !== undefined) {",
+      "  fs.unlinkSync(${1:name}?.path as string);",
+      "}"
+    ],
+    "description": "Express Multipart Remove image b4 aws upload"
+  },
   "Express router": {
     "prefix": "exp-router",
     "body": [
-      "import express, {Request, Response, NextFunction} from 'express';",
+      "import express ${1:, {Request, Response, NextFunction\\}} from 'express';",
       "",
       "const router = express.Router();",
       "",
@@ -1063,6 +1203,15 @@
       "${1|app,router|}.${2|get,post,delete,put,use|}('${3:/}', ${4: async (req:Request, res:Response, next: NextFunction) => {\\}})"
     ],
     "description": "Express route"
+  },
+  "Express route controller": {
+    "prefix": "exp-route-ctl",
+    "body": [
+      "////////////////////////////////////",
+      "/// ${1:Comment}",
+      "router.${2|get,post,delete,put|}('${3:/}', ${4: controller})"
+    ],
+    "description": "Express route controller"
   },
   "Express Control": {
     "prefix": "exp-ctl",
@@ -1154,6 +1303,100 @@
       "// }"
     ],
     "description": "Express Controller"
+  },
+  "Middleware file upload w/ multer": {
+    "prefix": "middle-fileupload",
+    "body": [
+      "import { Request, Response, NextFunction } from \"express\";",
+      "import fs from \"fs\";",
+      "import multer from \"multer\";",
+      "import { profileUpload } from \"../utils/fileupload\";",
+      "// ------ Utils Fileupload Instances ---------",
+      "// .single('fieldname') | for a single file",
+      "// .array('fieldname', 4) | multiple files with same fieldname and max",
+      "// .fields([{name: 'fieldname1', maxCount: 1}, ",
+      "//       {name: 'fieldname2', maxCount: 8}]) | for multiple files with different fieldnames and max",
+      "",
+      "const upload = profileUpload.single('${1:fieldName}');",
+      "",
+      "export const ${2:middleName} = async(req: Request, res: Response, next: NextFunction) => {",
+      "    const dir = \"./images/\";",
+      "    if (!fs.existsSync(dir)) {",
+      "      fs.mkdirSync(dir, { recursive: true });",
+      "    }",
+      "",
+      "    upload(req, res, function (err: any) {",
+      "        if (err instanceof multer.MulterError) {",
+      "            // A Multer error occurred while uploading.",
+      "            console.log(err.message);",
+      "            return res.status(400).json({ error: err.message });",
+      "        } else if (err) {",
+      "            // An error occurred from multer utils.",
+      "            console.log(err.message)",
+      "            return res.status(400).json({ error: err.message });",
+      "        }",
+      "        next();",
+      "    })",
+      "}"
+    ],
+    "description": "Middleware file upload w/ multer"
+  },
+  "Utils AWS S3": {
+    "prefix": "utils-aws-s3",
+    "body": [
+      "import fs from \"fs\";",
+      "import {",
+      "  S3Client,",
+      "  PutObjectCommand,",
+      "  GetObjectCommand,",
+      "  DeleteObjectCommand,",
+      "} from \"@aws-sdk/client-s3\";",
+      "import { getSignedUrl } from \"@aws-sdk/s3-request-presigner\";",
+      "import dotenv from \"dotenv\";",
+      "dotenv.config();",
+      "",
+      "const s3 = new S3Client({",
+      "  region: process.env.AWS_BUCKET_REGION,",
+      "  credentials: {",
+      "    accessKeyId: process.env.AWS_ACCESS_KEY as string,",
+      "    secretAccessKey: process.env.AWS_SECRET_KEY as string,",
+      "  },",
+      "});",
+      "",
+      "// eslint-disable-next-line @typescript-eslint/no-explicit-any",
+      "export const pushFile = (file: any) => {",
+      "  const fileStream = fs.createReadStream(file.path);",
+      "",
+      "  const uploadParams = {",
+      "    Bucket: process.env.AWS_BUCKET_NAME as string,",
+      "    Body: fileStream,",
+      "    Key: file.filename,",
+      "  };",
+      "",
+      "  const command = new PutObjectCommand(uploadParams);",
+      "  return s3.send(command);",
+      "};",
+      "",
+      "export const fetchFile = (filename: string, ttl: number) => {",
+      "  const getObjectParams = {",
+      "    Bucket: process.env.AWS_BUCKET_NAME as string,",
+      "    Key: filename,",
+      "  };",
+      "  const command = new GetObjectCommand(getObjectParams);",
+      "  return getSignedUrl(s3, command, { expiresIn: ttl });",
+      "};",
+      "",
+      "export const deleteFile = (filename: string) => {",
+      "  const deleteObjectParams = {",
+      "    Bucket: process.env.AWS_BUCKET_NAME as string,",
+      "    Key: filename,",
+      "  };",
+      "  const command = new DeleteObjectCommand(deleteObjectParams);",
+      "  return s3.send(command);",
+      "};",
+      ""
+    ],
+    "description": "Utils AWS S3"
   },
   "Mysql": {
     "prefix": "mysql-cf",
@@ -1455,14 +1698,14 @@
     ],
     "description": "Express middleware"
   },
-  "Express Multer Util": {
-    "prefix": "exp-multer-util",
+  "Utils-multer": {
+    "prefix": "utils-multer",
     "body": [
       "import multer from 'multer';",
       "",
       "const fileStorage = multer.diskStorage({",
       "    destination: (req, file, cb) => {",
-      "        cb(null, 'images')",
+      "        cb(null, './images')",
       "    },",
       "    filename: (req, file, cb) => {",
       "        cb(null, `${new Date().toISOString()}-${file.originalname}`);",
@@ -1470,8 +1713,8 @@
       "});",
       "",
       "const fileFilter = (req: any, file: any, cb: any) => {",
-      "    let maxSize = 4; // Mb",
-      "    let fileSize = Math.round(req.header('content-length') / (1024 * 1024));",
+      "    const maxSize = 4; // Mb",
+      "    const fileSize = Math.round(req.header('content-length') / (1024 * 1024));",
       "",
       "    if (file.mimetype === 'image/png' ||",
       "        file.mimetype === 'image/jpeg' ||",
@@ -1483,13 +1726,13 @@
       "    else cb(new Error('Mime Error'), false);",
       "}",
       "",
-      "export default multer({",
+      "export const imageUploader = multer({",
       "    storage: fileStorage,",
       "    fileFilter: fileFilter",
       "})",
       ""
     ],
-    "description": "Multer Util"
+    "description": "Utils-multer"
   },
   "Express Multer": {
     "prefix": "exp-multer",
@@ -1658,10 +1901,9 @@
       "import express, { Application, Request, Response } from \"express\";",
       "import helmet from \"helmet\";",
       "import cors from \"cors\";",
-      "import config from \"config\";",
       "import swaggerUI from \"swagger-ui-express\";",
-      "import { swaggerSpec } from \"./utils/swagger\";",
-      "import { corsOptions } from \"./utils/cors\";",
+      "import swaggerSpec from \"./swagger.json\";",
+      "import { corsOptions } from \"./utils/cors.utils\";",
       "",
       "const app: Application = express();",
       "",
@@ -1673,13 +1915,13 @@
       "////////////////////////////////////",
       "/// Endpoints",
       "app.use(",
-      "  `${config.get(\"baseEndPoint\")}/docs`,",
+      "  `/docs`,",
       "  swaggerUI.serve,",
       "  swaggerUI.setup(swaggerSpec)",
       ");",
       "",
       "app.get(",
-      "  `${config.get(\"baseEndPoint\")}/docs-json`,",
+      "  `/docs-json`,",
       "  (req: Request, res: Response) => {",
       "    res.setHeader(\"Content-Type\", \"application/json\");",
       "    res.send(swaggerSpec);",
@@ -1687,7 +1929,7 @@
       ");",
       "",
       "app.get(",
-      "  `${config.get(\"baseEndPoint\")}/`,",
+      "  `/`,",
       "  (req: Request, res: Response) => {",
       "    res.sendStatus(200);",
       "  }",
@@ -1710,7 +1952,7 @@
     "prefix": "utils-cors",
     "body": [
       "import { CorsOptions } from \"cors\";",
-      "import logger from \"./logger\";",
+      "import logger from \"./logger.utils\";",
       "",
       "const allowedOrigins:string[] = [];",
       "",
@@ -1814,6 +2056,33 @@
       "});"
     ],
     "description": "Pothos Builder"
+  },
+  "Prisma Client W/ Log": {
+    "prefix": "pris-cl-log",
+    "body": [
+      "import { PrismaClient } from \"@prisma/client\";",
+      "export const prisma = new PrismaClient({",
+      "  log: [",
+      "    {",
+      "      level: \"query\",",
+      "      emit: \"event\",",
+      "    },",
+      "    {",
+      "      level: \"error\",",
+      "      emit: \"event\",",
+      "    },",
+      "  ],",
+      "});",
+      "",
+      "prisma.$on(\"query\", (e) => {",
+      "  console.log(\"Params \", e.params);",
+      "  console.log(\"Query \", e.query);",
+      "});",
+      "prisma.$on(\"error\", (e) => {",
+      "  console.log(\"Error \", e.message);",
+      "});"
+    ],
+    "description": "Prisma Client W/ Log"
   },
   "Prisma Pothos Generator": {
     "prefix": "pris-pot-gen",
